@@ -7,11 +7,11 @@
   <arg name="save_spectrum" default="false"/>
   <arg name="hitting_target" default="table"/>
 
-  <node pkg="euslib" type="listen_mini_microphone.py" name="listen_mini_microphone" output="screen" respawn="true"/>
+  <node pkg="hitting_sound_classification" type="listen_mini_microphone.py" name="listen_mini_microphone" output="screen" respawn="true"/>
 
   <!-- <node pkg="euslib" type="spectrum_analyzer_mini_microphone.py" name="spectrum_analyzer_mini_microphone" output="screen"/> -->
 
-  <node pkg="euslib" type="save_hitting_sound.py" name="save_hitting_sound" output="screen" respawn="true">
+  <node pkg="hitting_sound_classification" type="save_hitting_sound.py" name="save_hitting_sound" output="screen" respawn="true">
     <param name="cutoff_rate" value="$(arg cutoff_rate)"/>
     <param name="time_to_listen" value="0.3"/>
     <param name="save_image" value="$(arg save_image)"/>
@@ -23,7 +23,7 @@
     <remap from="image" to="/mini_microphone/sound_image"/>
   </node>
 
-  <node pkg="euslib" type="classify_hitting_sound_ros.py" name="classify_hitting_sound" output="screen">
+  <node pkg="hitting_sound_classification" type="classify_hitting_sound_ros.py" name="classify_hitting_sound" output="screen">
     <param name="cutoff_rate" value="$(arg cutoff_rate)"/>
   </node>
 
