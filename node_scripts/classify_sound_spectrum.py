@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 
 
-class ClassifyHittingSound(object):
+class ClassifySoundSpectrum(object):
 
     def __init__(self):
         # load data
@@ -80,5 +80,5 @@ class ClassifyHittingSound(object):
 
 
 if __name__ == '__main__':
-    chs = ClassifyHittingSound()
-    chs.cross_varidation(k=7)
+    css = ClassifySoundSpectrum()
+    css.cross_varidation(k=7)
