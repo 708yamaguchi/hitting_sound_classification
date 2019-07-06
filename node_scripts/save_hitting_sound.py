@@ -52,10 +52,10 @@ class SaveHittingSound:
         self.target_class = rospy.get_param('~target_class', 'unspecified_data')
         self.save_dir = osp.join(os.environ['HOME'], 'hitting_sound_data')
         self.spectrum_save_dir = osp.join(self.save_dir, 'spectrum', self.target_class)
-        if not os.path.exists(self.spectrum_save_dir):
+        if self.save_spectrum and not os.path.exists(self.spectrum_save_dir):
             os.makedirs(self.spectrum_save_dir)
         self.image_save_dir = osp.join(self.save_dir, 'image', self.target_class)
-        if not os.path.exists(self.image_save_dir):
+        if self.save_image and not os.path.exists(self.image_save_dir):
             os.makedirs(self.image_save_dir)
 
     def sound_spec_cb(self, msg):
@@ -80,13 +80,8 @@ class SaveHittingSound:
                 file_name = osp.join(self.spectrum_save_dir, '{0:05d}.npy'.format(file_num))
                 np.save(file_name, spec_data)
                 rospy.loginfo('save spectrum: ' + file_name)
-            # if self.save_image:
-            #     file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
-            #     file_name = osp.join(self.image_save_dir, '{0:05d}.npy'.format(file_num))
-            #     np.save(file_name, jet_img_transposed)
-            #     rospy.loginfo('save image: ' + file_name)
         else:  # save image a little after hitting
-            if self.save_image and (self.count_from_last_hitting == self.queue_size / 2):
+            if self.save_image and (self.count_from_last_hitting == self.queue_size / 3):
                 file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
                 file_name = osp.join(self.image_save_dir, '{0:05d}.npy'.format(file_num))
                 np.save(file_name, jet_img_transposed)
