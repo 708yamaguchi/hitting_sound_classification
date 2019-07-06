@@ -15,15 +15,13 @@ import os.path as osp
 class SaveHittingSound:
     def __init__(self):
         rospy.init_node('save_hitting_sound', anonymous=True)
-        # subscribe
-        rospy.Subscriber('/mini_microphone/sound_spec', Float32MultiArray, self.sound_spec_cb)
         self.length = rospy.get_param('/mini_microphone/length')
         self.rate = rospy.get_param('/mini_microphone/rate')
         self.cutoff_rate = rospy.get_param('~cutoff_rate')
         self.wave_strength_thre = 1.0
         self.visualize_data_length = min(int(self.length * self.cutoff_rate / self.rate), self.length/2)
         self.time_to_listen = rospy.get_param('~time_to_listen')
-        self.queue_size = self.time_to_listen * (self.rate / self.length)
+        self.queue_size = int(self.time_to_listen * (self.rate / self.length))
         self.wave_spec_queue = np.zeros((
             self.queue_size,
             self.visualize_data_length
@@ -45,6 +43,9 @@ class SaveHittingSound:
         dim.stride = self.length
         self.hitting_sound.layout.append(dim)
         self.bridge = CvBridge()
+        self.count_from_last_hitting = 0
+        # subscribe
+        rospy.Subscriber('/mini_microphone/sound_spec', Float32MultiArray, self.sound_spec_cb)
         # save data
         self.save_image = rospy.get_param('~save_image')
         self.save_spectrum = rospy.get_param('~save_spectrum')
@@ -52,7 +53,10 @@ class SaveHittingSound:
         self.save_dir = osp.join(os.environ['HOME'], 'hitting_sound_data')
         self.spectrum_save_dir = osp.join(self.save_dir, 'spectrum', self.hitting_target)
         if not os.path.exists(self.spectrum_save_dir):
-            os.mkdir(self.spectrum_save_dir)
+            os.makedirs(self.spectrum_save_dir)
+        self.image_save_dir = osp.join(self.save_dir, 'image', self.hitting_target)
+        if not os.path.exists(self.image_save_dir):
+            os.makedirs(self.image_save_dir)
 
     def sound_spec_cb(self, msg):
         spec_data = np.array(msg.data[:self.visualize_data_length])  # remove folding noise
@@ -64,15 +68,30 @@ class SaveHittingSound:
         # publish hitting sound visualization
         normalized_spec_data = self.wave_spec_queue / np.max(self.wave_spec_queue)
         jet_img = np.array(cm.jet(1 - normalized_spec_data)[:, :, :3] * 255, np.uint8)
-        imgmsg = self.bridge.cv2_to_imgmsg(jet_img.transpose(1, 0, 2)[::-1], 'bgr8')
+        jet_img_transposed = jet_img.transpose(1, 0, 2)[::-1]
+        imgmsg = self.bridge.cv2_to_imgmsg(jet_img_transposed, 'bgr8')
         self.sound_image_pub.publish(imgmsg)
         # save spectrum if the hitting is strong
         wave_strength = np.sqrt(np.mean(spec_data**2))
-        if (self.save_spectrum) and (wave_strength > self.wave_strength_thre):
-            file_num = len(os.listdir(self.spectrum_save_dir)) + 1  # start from 00001.npy
-            file_name = osp.join(self.spectrum_save_dir, '{0:05d}.npy'.format(file_num))
-            np.save(file_name, spec_data)
-            rospy.loginfo('save ' + file_name)
+        if wave_strength > self.wave_strength_thre:
+            self.count_from_last_hitting = 0
+            if self.save_spectrum:
+                file_num = len(os.listdir(self.spectrum_save_dir)) + 1  # start from 00001.npy
+                file_name = osp.join(self.spectrum_save_dir, '{0:05d}.npy'.format(file_num))
+                np.save(file_name, spec_data)
+                rospy.loginfo('save spectrum: ' + file_name)
+            # if self.save_image:
+            #     file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
+            #     file_name = osp.join(self.image_save_dir, '{0:05d}.npy'.format(file_num))
+            #     np.save(file_name, jet_img_transposed)
+            #     rospy.loginfo('save image: ' + file_name)
+        else:  # save image a little after hitting
+            if self.save_image and (self.count_from_last_hitting == self.queue_size / 2):
+                file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
+                file_name = osp.join(self.image_save_dir, '{0:05d}.npy'.format(file_num))
+                np.save(file_name, jet_img_transposed)
+                rospy.loginfo('save image: ' + file_name)
+        self.count_from_last_hitting += 1
 
 
 if __name__ == '__main__':
