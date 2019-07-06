@@ -49,12 +49,12 @@ class SaveHittingSound:
         # save data
         self.save_image = rospy.get_param('~save_image')
         self.save_spectrum = rospy.get_param('~save_spectrum')
-        self.hitting_target = rospy.get_param('~hitting_target', 'unspecified_data')
+        self.target_class = rospy.get_param('~target_class', 'unspecified_data')
         self.save_dir = osp.join(os.environ['HOME'], 'hitting_sound_data')
-        self.spectrum_save_dir = osp.join(self.save_dir, 'spectrum', self.hitting_target)
+        self.spectrum_save_dir = osp.join(self.save_dir, 'spectrum', self.target_class)
         if not os.path.exists(self.spectrum_save_dir):
             os.makedirs(self.spectrum_save_dir)
-        self.image_save_dir = osp.join(self.save_dir, 'image', self.hitting_target)
+        self.image_save_dir = osp.join(self.save_dir, 'image', self.target_class)
         if not os.path.exists(self.image_save_dir):
             os.makedirs(self.image_save_dir)
 

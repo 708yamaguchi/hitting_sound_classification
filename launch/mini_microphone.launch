@@ -5,7 +5,7 @@
   <arg name="cutoff_rate" default="8000"/>
   <arg name="save_image" default="false"/>
   <arg name="save_spectrum" default="false"/>
-  <arg name="hitting_target" default="table"/>
+  <arg name="target_class" default="table"/>
 
   <node pkg="hitting_sound_classification" type="listen_mini_microphone.py" name="listen_mini_microphone" output="screen" respawn="true"/>
 
@@ -16,7 +16,7 @@
     <param name="time_to_listen" value="0.3"/>
     <param name="save_image" value="$(arg save_image)"/>
     <param name="save_spectrum" value="$(arg save_spectrum)"/>
-    <param name="hitting_target" value="$(arg hitting_target)"/>
+    <param name="target_class" value="$(arg target_class)"/>
   </node>
 
   <node pkg="image_view" type="image_view" name="sound_image_view">
