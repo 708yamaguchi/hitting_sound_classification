@@ -43,8 +43,8 @@ import imgaug.augmenters as iaa
 
 ia.seed(1)
 seq = iaa.Sequential([
-    iaa.Fliplr(0.5), # horizontal flips
-    iaa.Crop(percent=(0, 0.1)), # random crops
+    # iaa.Fliplr(0.5), # horizontal flips
+    # iaa.Crop(percent=(0, 0.1)), # random crops
     # Small gaussian blur with random sigma between 0 and 0.5.
     # But we only blur about 50% of all images.
     iaa.Sometimes(0.5,
@@ -67,8 +67,8 @@ seq = iaa.Sequential([
     iaa.Affine(
         scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
         translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)},
-        rotate=(-25, 25),
-        shear=(-8, 8)
+        # rotate=(-25, 25),
+        # shear=(-8, 8)
     )
 ], random_order=True)  # apply augmenters in random order
 
@@ -76,7 +76,7 @@ seq = iaa.Sequential([
 def split():
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--rate', default='0.8')  # train:test = 0.8:0.2
-    parser.add_argument('-p', '--path', default='~')
+    parser.add_argument('-p', '--path', default=osp.expanduser('~/hitting_sound_data/image/'))
     parser.add_argument('-a', '--augment', default='5')  # create (augment) images per 1 image
     args = parser.parse_args()
     rate = float(args.rate)
@@ -113,17 +113,17 @@ def split():
             saved_file_name = class_name + file_name
             img = Image_.open(osp.join(origin_dir, class_name, file_name))
             img_resize = img.resize((256, 256))
-            if i < file_num * rate:
+            if i < file_num * rate:  # save data for train
+                saved_file_name = 'train_' + saved_file_name
                 for j in range(int(args.augment)):
                     _ = osp.splitext(saved_file_name)
                     saved_file_name_augmented = _[0] + '_{0:03d}'.format(j) + _[1]
                     img_aug = Image_.fromarray(seq.augment_image(np.array(img_resize)))
                     img_aug.save(osp.join(dataset_dir, saved_file_name_augmented))
                     image_list_train.append(saved_file_name_augmented + ' ' + str(class_id) + '\n')
-            else:
-                shutil.copyfile(
-                    osp.join(origin_dir, class_name, file_name),
-                    osp.join(dataset_dir, saved_file_name))
+            else:  # save data for test
+                saved_file_name = 'test_' + saved_file_name
+                img_resize.save(osp.join(dataset_dir, saved_file_name))
                 image_list_test.append(saved_file_name + ' ' + str(class_id) + '\n')
 
         # create images.txt
