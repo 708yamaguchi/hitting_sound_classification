@@ -123,10 +123,12 @@ def split():
                     img_aug = Image_.fromarray(seq.augment_image(np.array(img_resize)))
                     img_aug.save(osp.join(dataset_dir, saved_file_name_augmented))
                     image_list_train.append(saved_file_name_augmented + ' ' + str(class_id) + '\n')
+                    print('saved {}'.format(saved_file_name_augmented))
             else:  # save data for test
                 saved_file_name = 'test_' + saved_file_name
                 img_resize.save(osp.join(dataset_dir, saved_file_name))
                 image_list_test.append(saved_file_name + ' ' + str(class_id) + '\n')
+                print('saved {}'.format(saved_file_name))
 
         # create images.txt
         # for train
