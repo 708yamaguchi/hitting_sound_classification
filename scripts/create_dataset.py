@@ -77,7 +77,7 @@ def split():
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--rate', default='0.8')  # train:test = 0.8:0.2
     parser.add_argument('-p', '--path', default='~')
-    parser.add_argument('-a', '--augment', default='20')  # create 20 images per 1 image
+    parser.add_argument('-a', '--augment', default='5')  # create (augment) images per 1 image
     args = parser.parse_args()
     rate = float(args.rate)
     root_dir = osp.expanduser(args.path)
@@ -113,18 +113,18 @@ def split():
             saved_file_name = class_name + file_name
             img = Image_.open(osp.join(origin_dir, class_name, file_name))
             img_resize = img.resize((256, 256))
-            for j in range(int(args.augment)):
-                _ = osp.splitext(saved_file_name)
-                saved_file_name_augmented = _[0] + '_{0:03d}'.format(j) + _[1]
-                img_aug = Image_.fromarray(seq.augment_image(np.array(img_resize)))
-                img_aug.save(osp.join(dataset_dir, saved_file_name_augmented))
-                # shutil.copyfile(
-                #     osp.join(origin_dir, class_name, file_name),
-                #     osp.join(dataset_dir, saved_file_name))
-                if i < file_num * rate:
+            if i < file_num * rate:
+                for j in range(int(args.augment)):
+                    _ = osp.splitext(saved_file_name)
+                    saved_file_name_augmented = _[0] + '_{0:03d}'.format(j) + _[1]
+                    img_aug = Image_.fromarray(seq.augment_image(np.array(img_resize)))
+                    img_aug.save(osp.join(dataset_dir, saved_file_name_augmented))
                     image_list_train.append(saved_file_name_augmented + ' ' + str(class_id) + '\n')
-                else:
-                    image_list_test.append(saved_file_name_augmented + ' ' + str(class_id) + '\n')
+            else:
+                shutil.copyfile(
+                    osp.join(origin_dir, class_name, file_name),
+                    osp.join(dataset_dir, saved_file_name))
+                image_list_test.append(saved_file_name + ' ' + str(class_id) + '\n')
 
         # create images.txt
         # for train
