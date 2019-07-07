@@ -5,7 +5,7 @@ Usage
 
 1. Save sound spectrum in `~/hitting_sound_data/spectrum`. Specify target object name (e.g. apple).
 ```bash
-roslaunch hitting_sound_classification mini_microphone.launch save_spectrum:=true hitting_target:=(taget object name)
+roslaunch hitting_sound_classification mini_microphone.launch save_spectrum:=true target_class:=(taget object name)
 ```
 
 2. Classify sound spectrum on ROS.
@@ -24,7 +24,7 @@ python classify_hitting_sound.py
 
 1. Save sound image in `~/hitting_sound_data/image/origin`. Specify target object name (e.g. apple).
 ```bash
-roslaunch hitting_sound_classification mini_microphone.launch save_image:=true hitting_target:=(taget object name)
+roslaunch hitting_sound_classification mini_microphone.launch save_image:=true target_class:=(taget object name)
 ```
 
 1-2. Visualize saved images
