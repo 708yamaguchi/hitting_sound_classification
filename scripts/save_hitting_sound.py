@@ -7,6 +7,7 @@ from std_msgs.msg import Float32MultiArray, MultiArrayDimension
 from cv_bridge import CvBridge
 import matplotlib.cm as cm
 from sensor_msgs.msg import Image
+from PIL import Image as Image_
 
 import os
 import os.path as osp
@@ -54,7 +55,7 @@ class SaveHittingSound:
         self.spectrum_save_dir = osp.join(self.save_dir, 'spectrum', self.target_class)
         if self.save_spectrum and not os.path.exists(self.spectrum_save_dir):
             os.makedirs(self.spectrum_save_dir)
-        self.image_save_dir = osp.join(self.save_dir, 'image', self.target_class)
+        self.image_save_dir = osp.join(self.save_dir, 'image', 'origin', self.target_class)
         if self.save_image and not os.path.exists(self.image_save_dir):
             os.makedirs(self.image_save_dir)
 
@@ -83,8 +84,9 @@ class SaveHittingSound:
         else:  # save image a little after hitting
             if self.save_image and (self.count_from_last_hitting == self.queue_size / 3):
                 file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
-                file_name = osp.join(self.image_save_dir, '{0:05d}.npy'.format(file_num))
-                np.save(file_name, jet_img_transposed)
+                file_name = osp.join(self.image_save_dir, '{0:05d}.png'.format(file_num))
+                # np.save(file_name, jet_img_transposed)
+                Image_.fromarray(jet_img_transposed).save(file_name)
                 rospy.loginfo('save image: ' + file_name)
         self.count_from_last_hitting += 1
 

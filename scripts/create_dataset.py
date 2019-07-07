@@ -33,6 +33,8 @@ import os.path as osp
 import argparse
 import shutil
 
+from PIL import Image as Image_
+
 
 def split():
     parser = argparse.ArgumentParser()
@@ -70,9 +72,12 @@ def split():
         # copy train and test data
         for i, file_name in enumerate(file_names):
             saved_file_name = class_name + file_name
-            shutil.copyfile(
-                osp.join(origin_dir, class_name, file_name),
-                osp.join(dataset_dir, saved_file_name))
+            img = Image_.open(osp.join(origin_dir, class_name, file_name))
+            img_resize = img.resize((256, 256))
+            img_resize.save(osp.join(dataset_dir, saved_file_name))
+            # shutil.copyfile(
+            #     osp.join(origin_dir, class_name, file_name),
+            #     osp.join(dataset_dir, saved_file_name))
             if i < file_num * rate:
                 image_list_train.append(saved_file_name + ' ' + str(class_id) + '\n')
             else:
