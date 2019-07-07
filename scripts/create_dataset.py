@@ -65,8 +65,10 @@ seq = iaa.Sequential([
     # Apply affine transformations to each image.
     # Scale/zoom them, translate/move them, rotate them and shear them.
     iaa.Affine(
-        scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
-        translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)},
+        # scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
+        scale={"x": (0.8, 1.2), "y": (1.0, 1.0)},
+        # translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)},
+        translate_percent={"x": (-0.2, 0.2), "y": (0, 0)},
         # rotate=(-25, 25),
         # shear=(-8, 8)
     )

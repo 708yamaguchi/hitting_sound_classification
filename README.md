@@ -8,27 +8,22 @@ Usage
 roslaunch hitting_sound_classification mini_microphone.launch save_image:=true target_class:=(taget object name)
 ```
 
-1-2. Visualize saved images
-```bash
-python visualize_saved_image.py --classname (target object name)
-```
-
 2. Create dataset for training.
 ```bash
-python create_dataset.py --path ~/hitting_sound_data/image
+python create_dataset.py
 ```
 
-3. Train with chainer.
+3. Visualize saved images (train or test must be selected)
 ```bash
-./train.py --gpu 0
+python visualize_saved_image.py train
 ```
 
-4. Classify sound spectrum on ROS.
-not yet
+4. Train with chainer.
+```bash
+./train.py --gpu 0 --epoch 100
+```
 
-4.
-
-5. Cross validation for collected sound image
+5. Classify sound image on ROS.
 not yet
 
 ### Use sound spectrum directly
