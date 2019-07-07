@@ -22,9 +22,13 @@ python visualize_saved_image.py train
 ```bash
 ./train.py --gpu 0 --epoch 100 --test
 ```
+NOTE: only nin.py is available. (other model is for ImageNet, 1000 class classification)
 
 5. Classify sound image on ROS.
-not yet
+```
+roslaunch hitting_sound_classification mini_microphone.launch
+rostopic echo /object_class_by_image
+```
 
 ### Use sound spectrum directly
 
