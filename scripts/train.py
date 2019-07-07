@@ -21,7 +21,7 @@ import chainer
 from chainer import dataset
 from chainer import training
 from chainer.training import extensions
-import chainerx
+# import chainerx
 
 from chainer_modules import dali_util
 
@@ -134,7 +134,8 @@ def main():
                        help='GPU ID (negative value indicates CPU)')
     args = parser.parse_args()
 
-    device = chainer.get_device(args.device)
+    # device = chainer.get_device(args.device)  # for python3
+    device = chainer.cuda.get_device(args.device)  # for python2
 
     # Set the dtype if supplied.
     if args.dtype is not None:
@@ -206,8 +207,8 @@ def main():
     trainer.extend(extensions.Evaluator(val_iter, model, converter=converter,
                                         device=device), trigger=val_interval)
     # TODO(sonots): Temporarily disabled for chainerx. Fix it.
-    if device.xp is not chainerx:
-        trainer.extend(extensions.DumpGraph('main/loss'))
+    # if device.xp is not chainerx:
+    #     trainer.extend(extensions.DumpGraph('main/loss'))
     trainer.extend(extensions.snapshot(), trigger=val_interval)
     trainer.extend(extensions.snapshot_object(
         model, 'model_iter_{.updater.iteration}'), trigger=val_interval)
