@@ -52,26 +52,34 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
         #     - Cropping (random or center rectangular)
         #     - Random flip
         #     - Scaling to [0, 1] value
-        crop_size = self.crop_size
+        # crop_size = self.crop_size
 
         image, label = self.base[i]
-        _, h, w = image.shape
 
-        if self.random:
-            # Randomly crop a region and flip the image
-            top = random.randint(0, h - crop_size - 1)
-            left = random.randint(0, w - crop_size - 1)
-            if random.randint(0, 1):
-                image = image[:, :, ::-1]
-        else:
-            # Crop the center
-            top = (h - crop_size) // 2
-            left = (w - crop_size) // 2
-        bottom = top + crop_size
-        right = left + crop_size
+        # _, h, w = image.shape
 
-        image = image[:, top:bottom, left:right]
-        image -= self.mean[:, top:bottom, left:right]
+        # if self.random:
+        #     # Randomly crop a region and flip the image
+        #     top = random.randint(0, h - crop_size - 1)
+        #     left = random.randint(0, w - crop_size - 1)
+        #     if random.randint(0, 1):
+        #         image = image[:, :, ::-1]
+        # else:
+        #     # Crop the center
+        #     top = (h - crop_size) // 2
+        #     left = (w - crop_size) // 2
+        # bottom = top + crop_size
+        # right = left + crop_size
+
+        # image = image[:, top:bottom, left:right]
+
+        # import cv2
+        # img = image.transpose((1, 2, 0)).astype(np.uint8)
+        # cv2.imshow('hoge', img)
+        # cv2.waitKey(0)
+
+        # image -= self.mean[:, top:bottom, left:right]
+        image -= self.mean  # image is np.astype(np.float32)
         image *= (1.0 / 255.0)  # Scale to [0, 1]
         return image, label
 
