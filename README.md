@@ -18,7 +18,7 @@ python create_dataset.py
 python visualize_saved_image.py train
 ```
 
-4. Train with chainer.
+4. Train with chainer. Results are in `scripts/result`
 ```bash
 ./train.py --gpu 0 --epoch 100
 ```
