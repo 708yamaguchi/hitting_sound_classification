@@ -8,12 +8,12 @@ Usage
 roslaunch hitting_sound_classification mini_microphone.launch save_image:=true target_class:=(taget object name)
 ```
 
-2. Create dataset for training.
+2. Create dataset for training. train data is augmented, but test data is not augmented.
 ```bash
 python create_dataset.py
 ```
 
-3. Visualize saved images (train or test must be selected)
+3. Visualize saved images (train or test must be selected as an argument)
 ```bash
 python visualize_saved_image.py train
 ```
