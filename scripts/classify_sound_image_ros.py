@@ -61,7 +61,7 @@ class ClassifySoundImageROS:
 
         # Load the mean file
         mean_file_path = osp.join('/'.join(initmodel.split('/')[:-2]), 'chainer_modules', 'mean.npy')
-        mean = np.load(mean_file_path)
+        self.mean = np.load(mean_file_path)
         # # Load the dataset files
         # train = PreprocessedDataset(args.train, args.root, mean, model.insize)
         # val = PreprocessedDataset(args.val, args.root, mean, self.model.insize,
@@ -87,9 +87,13 @@ class ClassifySoundImageROS:
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
         with chainer.using_config('train', False), \
              chainer.no_backprop_mode():
-            # TODO: substruct mean value (consider rgb or bgr)
             x_data = np.array(Image_.fromarray(cv_image).resize((256, 256))).astype(np.float32)
-            x_data = cuda.to_gpu(x_data.transpose((2, 0, 1))[None], device=self.gpu)
+            x_data = x_data.transpose((2, 0, 1))
+            # substruct mean value (but I do not have confidence in the code ...)
+            ch_mean = np.average(self.mean, axis=(1, 2)).astype(np.float32)
+            x_data = x_data - ch_mean.reshape((3,1,1))
+            # fowarding once
+            x_data = cuda.to_gpu(x_data[None], device=self.gpu)
             x_data = chainer.Variable(x_data)
             ret = self.model.forward_for_test(x_data)
             ret = cuda.to_cpu(ret.data)[0]
