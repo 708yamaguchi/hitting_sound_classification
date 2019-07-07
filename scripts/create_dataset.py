@@ -1,30 +1,32 @@
 #!/usr/bin/env python
+
 # -*- coding: utf-8 -*-
 
 # directory composition
-# origin - class1 -- img001.png
-#        |        |- img002.png
+# origin - classA -- 001.png
+#        |        |- 002.png
 #        |        |- ...
-#        - class2 -- img001.png
-#                 |- img002.png
+#        - classB -- 001.png
+#                 |- 002.png
 #                 |- ...
 #
 # -> (./create_dataset.py)
 #
-# origin - class1 -- img001.png
-#        |        |- img002.png
+# origin - classA -- 001.png
+#        |        |- 002.png
 #        |        |- ...
-#        - class2 -- img001.png
-#                 |- img002.png
+#        - classB -- 001.png
+#                 |- 002.png
 #                 |- ...
-# train  - class1 -- img001.png
-#        |        |- ...
-#        - class2 -- img001.png
-#                 |- ...
-# test   - class1 -- img002.png
-#        |        |- ...
-#        - class2 -- img002.png
-#                 |- ...
+# train  -- images.txt
+#        |- classA001.png
+#        |- classB001.png
+#        |- ...
+# train  -- images.txt
+#        |- classA002.png
+#        |- classB002.png
+#        |- ...
+
 
 import os
 import os.path as osp
@@ -40,32 +42,53 @@ def split():
     rate = float(args.rate)
     root_dir = osp.expanduser(args.path)
     origin_dir = osp.join(root_dir, 'origin')
-    train_dir = osp.join(root_dir, 'train')
-    test_dir = osp.join(root_dir, 'test')
+    # train_dir = osp.join(root_dir, 'train')
+    # test_dir = osp.join(root_dir, 'test')
+    dataset_dir = osp.join(root_dir, 'dataset')
+    image_list_train = []
+    image_list_test = []
     # remove train and test dir if exist
-    if osp.exists(train_dir):
-        shutil.rmtree(train_dir)
-    if osp.exists(test_dir):
-        shutil.rmtree(test_dir)
-    for class_name in os.listdir(origin_dir):
+    # if osp.exists(train_dir):
+    #     shutil.rmtree(train_dir)
+    # os.mkdir(train_dir)
+    # if osp.exists(test_dir):
+    #     shutil.rmtree(test_dir)
+    # os.mkdir(test_dir)
+    if osp.exists(dataset_dir):
+        shutil.rmtree(dataset_dir)
+    os.mkdir(dataset_dir)
+    for class_id, class_name in enumerate(os.listdir(origin_dir)):
         file_names = os.listdir(osp.join(origin_dir, class_name))
         file_num = len(file_names)
-        class_dir_in_train = osp.join(osp.split(origin_dir)[0], 'train', class_name)
-        class_dir_in_test = osp.join(osp.split(origin_dir)[0], 'test', class_name)
-        if not osp.exists(class_dir_in_train):
-            os.makedirs(class_dir_in_train)
-        if not osp.exists(class_dir_in_test):
-            os.makedirs(class_dir_in_test)
+        # class_dir_in_train = osp.join(osp.split(origin_dir)[0], 'train', class_name)
+        # class_dir_in_test = osp.join(osp.split(origin_dir)[0], 'test', class_name)
+        # if not osp.exists(class_dir_in_train):
+        #     os.makedirs(class_dir_in_train)
+        # if not osp.exists(class_dir_in_test):
+        #     os.makedirs(class_dir_in_test)
+
         # copy train and test data
         for i, file_name in enumerate(file_names):
+            saved_file_name = class_name + file_name
+            shutil.copyfile(
+                osp.join(origin_dir, class_name, file_name),
+                osp.join(dataset_dir, saved_file_name))
             if i < file_num * rate:
-                shutil.copyfile(
-                    osp.join(origin_dir, class_name, file_name),
-                    osp.join(class_dir_in_train, file_name))
+                image_list_train.append(saved_file_name + ' ' + str(class_id) + '\n')
             else:
-                shutil.copyfile(
-                    osp.join(origin_dir, class_name, file_name),
-                    osp.join(class_dir_in_test, file_name))
+                image_list_test.append(saved_file_name + ' ' + str(class_id) + '\n')
+
+        # create images.txt
+        # for train
+        file_path = osp.join(dataset_dir, 'train_images.txt')
+        with open(file_path, mode='w') as f:
+            for line_ in image_list_train:
+                f.write(line_)
+        # for test
+        file_path = osp.join(dataset_dir, 'test_images.txt')
+        with open(file_path, mode='w') as f:
+            for line_ in image_list_test:
+                f.write(line_)
 
 
 if __name__ == '__main__':
