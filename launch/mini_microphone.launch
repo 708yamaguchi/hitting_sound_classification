@@ -27,4 +27,7 @@
     <param name="cutoff_rate" value="$(arg cutoff_rate)"/>
   </node>
 
+  <node pkg="hitting_sound_classification" type="classify_sound_image_ros.py" name="classify_sound_image_ros" output="screen">
+    <param name="model" value="$(find hitting_sound_classification)/scripts/result/model_best.npz"/>
+  </node>
 </launch>

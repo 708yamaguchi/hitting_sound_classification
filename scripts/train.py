@@ -149,7 +149,11 @@ def main():
     print('')
 
     # Initialize the model to train
-    model = archs[args.arch]()
+    n_class = 0
+    with open(osp.join(args.root, 'n_class.txt'), mode='r') as f:
+        for row in f:
+            n_class += 1
+    model = archs[args.arch](n_class=n_class)
     if args.initmodel:
         print('Load model from {}'.format(args.initmodel))
         chainer.serializers.load_npz(args.initmodel, model)

@@ -99,7 +99,12 @@ def split():
     if osp.exists(dataset_dir):
         shutil.rmtree(dataset_dir)
     os.mkdir(dataset_dir)
-    for class_id, class_name in enumerate(os.listdir(origin_dir)):
+    # write how many classes
+    classes = os.listdir(origin_dir)
+    with open(osp.join(dataset_dir, 'n_class.txt'), mode='w') as f:
+        for class_name in classes:
+            f.write(class_name + '\n')
+    for class_id, class_name in enumerate(classes):
         file_names = os.listdir(osp.join(origin_dir, class_name))
         file_num = len(file_names)
         # class_dir_in_train = osp.join(osp.split(origin_dir)[0], 'train', class_name)
