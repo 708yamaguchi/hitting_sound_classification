@@ -14,8 +14,9 @@ ImageDataLayer).
 """
 import argparse
 import random
-
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')  # necessary not to ranse Tcl_AsyncDelete Error
 
 import chainer
 from chainer import dataset
