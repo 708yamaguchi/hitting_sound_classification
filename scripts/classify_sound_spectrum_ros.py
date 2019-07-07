@@ -18,7 +18,7 @@ class ClassifySoundSpectrumROS:
         self.css = ClassifySoundSpectrum()
         self.css.load_data(k=7)
         self.sub = rospy.Subscriber('/mini_microphone/sound_spec', Float32MultiArray, self.cb)
-        self.pub = rospy.Publisher('/object_class', String, queue_size=1)
+        self.pub = rospy.Publisher('/object_class_by_spectrum', String, queue_size=1)
 
     def cb(self, msg):
         spec_data = np.array(msg.data[:self.visualize_data_length])  # remove folding noise
