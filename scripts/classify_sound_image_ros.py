@@ -85,16 +85,19 @@ class ClassifySoundImageROS:
 
     def cb(self, msg):
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
-        # import cv2
-        # cv2.imshow('hoge', cv_image)
-        # cv2.waitKey(0)
         with chainer.using_config('train', False), \
              chainer.no_backprop_mode():
             x_data = np.array(Image_.fromarray(cv_image).resize((256, 256))).astype(np.float32)
             x_data = x_data.transpose((2, 0, 1))
+            ############### kokode itti with train.py
+            # import cv2
+            # cv2.imshow('hoge', x_data.transpose((1, 2, 0)).astype(np.uint8))
+            # cv2.waitKey(0)
+            ###############
             # substruct mean value (but I do not have confidence in the code ...)
-            ch_mean = np.average(self.mean, axis=(1, 2)).astype(np.float32)
-            x_data = x_data - ch_mean.reshape((3, 1, 1))
+            # ch_mean = np.average(self.mean, axis=(1, 2)).astype(np.float32)
+            mean = self.mean.astype(np.float32)
+            x_data -= mean
             x_data *= (1.0 / 255.0)  # Scale to [0, 1]
             # fowarding once
             x_data = cuda.to_gpu(x_data[None], device=self.gpu)

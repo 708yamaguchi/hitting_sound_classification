@@ -73,10 +73,11 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
 
         # image = image[:, top:bottom, left:right]
 
+        ############### kokode itti with classify_sound_image_ros.py
         # import cv2
-        # img = image.transpose((1, 2, 0)).astype(np.uint8)
-        # cv2.imshow('hoge', img)
+        # cv2.imshow('hoge', image.transpose((1, 2, 0)).astype(np.uint8))
         # cv2.waitKey(0)
+        ###############
 
         # image -= self.mean[:, top:bottom, left:right]
         image -= self.mean  # image is np.astype(np.float32)
