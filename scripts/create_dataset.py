@@ -36,10 +36,48 @@ import shutil
 from PIL import Image as Image_
 
 
+import numpy as np
+import imgaug as ia
+import imgaug.augmenters as iaa
+
+
+ia.seed(1)
+seq = iaa.Sequential([
+    iaa.Fliplr(0.5), # horizontal flips
+    iaa.Crop(percent=(0, 0.1)), # random crops
+    # Small gaussian blur with random sigma between 0 and 0.5.
+    # But we only blur about 50% of all images.
+    iaa.Sometimes(0.5,
+        iaa.GaussianBlur(sigma=(0, 0.5))
+    ),
+    # Strengthen or weaken the contrast in each image.
+    iaa.ContrastNormalization((0.75, 1.5)),
+    # Add gaussian noise.
+    # For 50% of all images, we sample the noise once per pixel.
+    # For the other 50% of all images, we sample the noise per pixel AND
+    # channel. This can change the color (not only brightness) of the
+    # pixels.
+    iaa.AdditiveGaussianNoise(loc=0, scale=(0.0, 0.05*255), per_channel=0.5),
+    # Make some images brighter and some darker.
+    # In 20% of all cases, we sample the multiplier once per channel,
+    # which can end up changing the color of the images.
+    iaa.Multiply((0.8, 1.2), per_channel=0.2),
+    # Apply affine transformations to each image.
+    # Scale/zoom them, translate/move them, rotate them and shear them.
+    iaa.Affine(
+        scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},
+        translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)},
+        rotate=(-25, 25),
+        shear=(-8, 8)
+    )
+], random_order=True)  # apply augmenters in random order
+
+
 def split():
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--rate', default='0.8')  # train:test = 0.8:0.2
     parser.add_argument('-p', '--path', default='~')
+    parser.add_argument('-a', '--augment', default='20')  # create 20 images per 1 image
     args = parser.parse_args()
     rate = float(args.rate)
     root_dir = osp.expanduser(args.path)
@@ -70,18 +108,23 @@ def split():
         #     os.makedirs(class_dir_in_test)
 
         # copy train and test data
+        # resize and augment data (multiple args.augment times)
         for i, file_name in enumerate(file_names):
             saved_file_name = class_name + file_name
             img = Image_.open(osp.join(origin_dir, class_name, file_name))
             img_resize = img.resize((256, 256))
-            img_resize.save(osp.join(dataset_dir, saved_file_name))
-            # shutil.copyfile(
-            #     osp.join(origin_dir, class_name, file_name),
-            #     osp.join(dataset_dir, saved_file_name))
-            if i < file_num * rate:
-                image_list_train.append(saved_file_name + ' ' + str(class_id) + '\n')
-            else:
-                image_list_test.append(saved_file_name + ' ' + str(class_id) + '\n')
+            for j in range(int(args.augment)):
+                _ = osp.splitext(saved_file_name)
+                saved_file_name_augmented = _[0] + '_{0:03d}'.format(j) + _[1]
+                img_aug = Image_.fromarray(seq.augment_image(np.array(img_resize)))
+                img_aug.save(osp.join(dataset_dir, saved_file_name_augmented))
+                # shutil.copyfile(
+                #     osp.join(origin_dir, class_name, file_name),
+                #     osp.join(dataset_dir, saved_file_name))
+                if i < file_num * rate:
+                    image_list_train.append(saved_file_name_augmented + ' ' + str(class_id) + '\n')
+                else:
+                    image_list_test.append(saved_file_name_augmented + ' ' + str(class_id) + '\n')
 
         # create images.txt
         # for train
