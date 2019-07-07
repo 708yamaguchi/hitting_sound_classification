@@ -20,7 +20,7 @@ python visualize_saved_image.py train
 
 4. Train with chainer. Results are in `scripts/result`
 ```bash
-./train.py --gpu 0 --epoch 100
+./train.py --gpu 0 --epoch 100 --test
 ```
 
 5. Classify sound image on ROS.
