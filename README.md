@@ -1,7 +1,9 @@
 Usage
 =====
 
-### Use sound image
+## Sound image classification
+
+### Commands
 
 1. Save sound image in `~/hitting_sound_data/image/origin`. Specify target object name (e.g. apple).
 ```bash
@@ -37,14 +39,17 @@ roslaunch hitting_sound_classification record_sound_image_classification.launch 
 roslaunch hitting_sound_classification play_sound_image_classification.launch filename:=$HOME/hoge.bag
 ```
 
-Experiment: 3 class classification using sound image (bed, table, tissue_box)  
+### Experiment
+3 class classification using sound image (bed, table, tissue_box)  
 ![Experiment](https://github.com/708yamaguchi/hitting_sound_classification/blob/media/sound_image_classification.gif)  
 Upper left : Estimated class  
 Left       : Sound image  
 Right      : Video  
 
 
-### Use sound spectrum directly
+## Sound spectrum classification
+
+### Commands
 
 1. Save sound spectrum in `~/hitting_sound_data/spectrum`. Specify target object name (e.g. apple).
 ```bash
