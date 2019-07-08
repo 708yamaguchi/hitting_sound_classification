@@ -19,10 +19,6 @@
     <param name="target_class" value="$(arg target_class)"/>
   </node>
 
-  <node pkg="image_view" type="image_view" name="sound_image_view">
-    <remap from="image" to="/mini_microphone/sound_image"/>
-  </node>
-
   <!-- sound classification if we do not save sound -->
   <group unless="$(arg save_image)">
     <group unless="$(arg save_spectrum)">
@@ -32,6 +28,8 @@
       <node pkg="hitting_sound_classification" type="classify_sound_image_ros.py" name="classify_sound_image_ros" output="screen">
         <param name="model" value="$(find hitting_sound_classification)/scripts/result/model_best.npz"/>
       </node>
+      <node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find hitting_sound_classification)/config/sound_image_classification.perspective"/>
+      <node pkg="usb_cam" type="usb_cam_node" name="usb_cam_node" />
     </group>
   </group>
 </launch>
