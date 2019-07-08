@@ -1,16 +1,16 @@
 <launch>
 
   <node pkg="jsk_perception" type="image_publisher.py" name="image_publisher">
-    <remap from="~output" to="/mini_microphone/sound_image"/>
-    <param name="file_name" value="/home/naoya/hitting_sound_data/image/dataset/test_bed00034.png"/>
-  </node>
-
-  <node pkg="image_view" type="image_view" name="sound_image_view">
-    <remap from="image" to="/mini_microphone/sound_image"/>
+    <remap from="~output" to="/mini_microphone/hit_sound_image"/>
+    <param name="file_name" value="/home/naoya/hitting_sound_data/image/dataset/test_bed00012.png"/>
   </node>
 
   <node pkg="hitting_sound_classification" type="classify_sound_image_ros.py" name="classify_sound_image_ros" output="screen">
     <param name="model" value="$(find hitting_sound_classification)/scripts/result/model_best.npz"/>
   </node>
+
+  <!-- <node pkg="image_view" type="image_view" name="sound_image_view"> -->
+  <!--   <remap from="image" to="/mini_microphone/hit_sound_image"/> -->
+  <!-- </node> -->
 
 </launch>
