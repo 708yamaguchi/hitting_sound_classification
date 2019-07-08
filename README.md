@@ -37,6 +37,12 @@ roslaunch hitting_sound_classification record_sound_image_classification.launch 
 roslaunch hitting_sound_classification play_sound_image_classification.launch filename:=$HOME/hoge.bag
 ```
 
+Experiment: 3 class classification using sound image (bed, table, tissue_box)  
+![Experiment](https://github.com/708yamaguchi/hitting_sound_classification/blob/media/sound_image_classification.gif)  
+Upper left : Estimated class  
+Left       : Sound image  
+Right      : Video  
+
 
 ### Use sound spectrum directly
 
