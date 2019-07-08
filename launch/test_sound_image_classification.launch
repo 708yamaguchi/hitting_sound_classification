@@ -2,7 +2,7 @@
 
   <node pkg="jsk_perception" type="image_publisher.py" name="image_publisher">
     <remap from="~output" to="/mini_microphone/hit_sound_image"/>
-    <param name="file_name" value="/home/naoya/hitting_sound_data/image/dataset/test_bed00012.png"/>
+    <param name="file_name" value="/home/naoya/hitting_sound_data/image/dataset/test_tissue_box00012.png"/>
   </node>
 
   <node pkg="hitting_sound_classification" type="classify_sound_image_ros.py" name="classify_sound_image_ros" output="screen">

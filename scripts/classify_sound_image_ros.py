@@ -78,12 +78,16 @@ class ClassifySoundImageROS:
         optimizer = chainer.optimizers.MomentumSGD(lr=0.01, momentum=0.9)
         optimizer.setup(self.model)
 
-        self.sub = rospy.Subscriber(
-            '/mini_microphone/hit_sound_image', Image, self.cb)
+        self.hit_sub = rospy.Subscriber(
+            '/mini_microphone/hit_sound_image', Image, self.hit_cb)
         self.pub = rospy.Publisher('/object_class_by_image', String, queue_size=1)
         self.bridge = CvBridge()
 
-    def cb(self, msg):
+    def hit_cb(self, msg):
+        # msg = String()
+        # msg.data = 'no object'
+        # self.pub.publish(msg)
+
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
         with chainer.using_config('train', False), \
              chainer.no_backprop_mode():
@@ -106,6 +110,9 @@ class ClassifySoundImageROS:
             ret = cuda.to_cpu(ret.data)[0]
         msg = String()
         msg.data = self.classes[np.argmax(ret)]
+        self.pub.publish(msg)
+        rospy.sleep(0.5)
+        msg.data = 'no object'
         self.pub.publish(msg)
 
 
