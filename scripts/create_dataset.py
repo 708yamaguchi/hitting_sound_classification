@@ -99,7 +99,7 @@ def split():
         shutil.rmtree(dataset_dir)
     os.mkdir(dataset_dir)
     # write how many classes
-    classes = os.listdir(origin_dir)
+    classes = sorted(os.listdir(origin_dir))
     with open(osp.join(dataset_dir, 'n_class.txt'), mode='w') as f:
         for class_name in classes:
             f.write(class_name + '\n')
