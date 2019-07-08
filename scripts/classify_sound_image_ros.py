@@ -79,7 +79,7 @@ class ClassifySoundImageROS:
         optimizer.setup(self.model)
 
         self.sub = rospy.Subscriber(
-            '/mini_microphone/sound_image', Image, self.cb)
+            '/mini_microphone/hit_sound_image', Image, self.cb)
         self.pub = rospy.Publisher('/object_class_by_image', String, queue_size=1)
         self.bridge = CvBridge()
 

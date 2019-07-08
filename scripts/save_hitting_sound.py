@@ -32,6 +32,8 @@ class SaveHittingSound:
             '/mini_microphone/hitting_sound', Float32MultiArray)
         self.sound_image_pub = rospy.Publisher(
             '/mini_microphone/sound_image', Image)
+        self.hit_sound_image_pub = rospy.Publisher(
+            '/mini_microphone/hit_sound_image', Image)
         self.hitting_sound = Float32MultiArray()
         self.hitting_sound.layout = []
         dim = MultiArrayDimension()
@@ -82,12 +84,15 @@ class SaveHittingSound:
                 np.save(file_name, spec_data)
                 rospy.loginfo('save spectrum: ' + file_name)
         else:  # save image a little after hitting
-            if self.save_image and (self.count_from_last_hitting == self.queue_size / 3):
-                file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
-                file_name = osp.join(self.image_save_dir, '{0:05d}.png'.format(file_num))
-                # np.save(file_name, jet_img_transposed)
-                Image_.fromarray(jet_img_transposed[:, :, [2, 1, 0]]).save(file_name)  # bgr -> rgb
-                rospy.loginfo('save image: ' + file_name)
+            if self.count_from_last_hitting == self.queue_size / 3:
+                if self.save_image:
+                    file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
+                    file_name = osp.join(self.image_save_dir, '{0:05d}.png'.format(file_num))
+                    # np.save(file_name, jet_img_transposed)
+                    Image_.fromarray(jet_img_transposed[:, :, [2, 1, 0]]).save(file_name)  # bgr -> rgb
+                    rospy.loginfo('save image: ' + file_name)
+
+                self.hit_sound_image_pub.publish(imgmsg)
         self.count_from_last_hitting += 1
 
 
