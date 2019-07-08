@@ -78,9 +78,11 @@ class ClassifySoundImageROS:
         optimizer = chainer.optimizers.MomentumSGD(lr=0.01, momentum=0.9)
         optimizer.setup(self.model)
 
+        # subscriber and publisher
         self.hit_sub = rospy.Subscriber(
             '/mini_microphone/hit_sound_image', Image, self.hit_cb)
         self.pub = rospy.Publisher('/object_class_by_image', String, queue_size=1)
+
         self.bridge = CvBridge()
 
     def hit_cb(self, msg):

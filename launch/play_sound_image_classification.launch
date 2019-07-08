@@ -1,0 +1,17 @@
+<launch>
+
+  <!-- see /home/leus/ros/indigo/src/start-jsk/jsk_apc/jsk_arc2017_baxter/launch/setup/include/play_rosbag.launch -->
+
+  <!-- USAGE -->
+  <!-- roslaunch euslib play_rosbag.launch filename:=$HOME/.ros/rosbag/sotsuron/hoge.bag -->
+
+  <arg name="filename" />
+
+  <param name="use_sim_time" value="true" />
+  <node name="rosbag_play"
+        pkg="rosbag" type="play"
+        args="$(arg filename) --clock --loop"/>
+
+  <node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find hitting_sound_classification)/config/sound_image_classification.perspective"/>
+
+</launch>
