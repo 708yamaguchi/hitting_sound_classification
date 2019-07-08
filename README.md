@@ -25,9 +25,18 @@ python visualize_saved_image.py train
 NOTE: Only `NIN` architecture is available now. (Other models are for ImageNet, 1000 class classification)
 
 5. Classify sound image on ROS. (Results are Visualized in rqt)
-```
+```bash
 roslaunch hitting_sound_classification mini_microphone.launch
 ```
+
+6. Record/Play rosbag
+```bash
+# record
+roslaunch hitting_sound_classification record_sound_image_classification.launch filename:=$HOME/hoge.bag
+# play
+roslaunch hitting_sound_classification play_sound_image_classification.launch filename:=$HOME/hoge.bag
+```
+
 
 ### Use sound spectrum directly
 
