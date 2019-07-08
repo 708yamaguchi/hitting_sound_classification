@@ -73,6 +73,8 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
 
         # image = image[:, top:bottom, left:right]
 
+        image = image[[2, 1, 0], :, :]  # bgr -> rgb
+
         ############### kokode itti with classify_sound_image_ros.py
         # import cv2
         # cv2.imshow('hoge', image.transpose((1, 2, 0)).astype(np.uint8))

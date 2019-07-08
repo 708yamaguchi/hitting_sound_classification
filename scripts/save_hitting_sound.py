@@ -19,7 +19,7 @@ class SaveHittingSound:
         self.length = rospy.get_param('/mini_microphone/length')
         self.rate = rospy.get_param('/mini_microphone/rate')
         self.cutoff_rate = rospy.get_param('~cutoff_rate')
-        self.wave_strength_thre = 1.0
+        self.wave_strength_thre = 2.0
         self.visualize_data_length = min(int(self.length * self.cutoff_rate / self.rate), self.length/2)
         self.time_to_listen = rospy.get_param('~time_to_listen')
         self.queue_size = int(self.time_to_listen * (self.rate / self.length))
@@ -86,7 +86,7 @@ class SaveHittingSound:
                 file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
                 file_name = osp.join(self.image_save_dir, '{0:05d}.png'.format(file_num))
                 # np.save(file_name, jet_img_transposed)
-                Image_.fromarray(jet_img_transposed).save(file_name)
+                Image_.fromarray(jet_img_transposed[:, :, [2, 1, 0]]).save(file_name)  # bgr -> rgb
                 rospy.loginfo('save image: ' + file_name)
         self.count_from_last_hitting += 1
 

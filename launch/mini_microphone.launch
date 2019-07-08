@@ -23,11 +23,15 @@
     <remap from="image" to="/mini_microphone/sound_image"/>
   </node>
 
-  <node pkg="hitting_sound_classification" type="classify_sound_spectrum_ros.py" name="classify_sound_spectrum_ros" output="screen">
-    <param name="cutoff_rate" value="$(arg cutoff_rate)"/>
-  </node>
-
-  <node pkg="hitting_sound_classification" type="classify_sound_image_ros.py" name="classify_sound_image_ros" output="screen">
-    <param name="model" value="$(find hitting_sound_classification)/scripts/result/model_best.npz"/>
-  </node>
+  <!-- sound classification if we do not save sound -->
+  <group unless="$(arg save_image)">
+    <group unless="$(arg save_spectrum)">
+      <node pkg="hitting_sound_classification" type="classify_sound_spectrum_ros.py" name="classify_sound_spectrum_ros" output="screen">
+        <param name="cutoff_rate" value="$(arg cutoff_rate)"/>
+      </node>
+      <node pkg="hitting_sound_classification" type="classify_sound_image_ros.py" name="classify_sound_image_ros" output="screen">
+        <param name="model" value="$(find hitting_sound_classification)/scripts/result/model_best.npz"/>
+      </node>
+    </group>
+  </group>
 </launch>
