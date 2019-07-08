@@ -8,7 +8,7 @@ Usage
 roslaunch hitting_sound_classification mini_microphone.launch save_image:=true target_class:=(taget object name)
 ```
 
-2. Create dataset for training. train data is augmented, but test data is not augmented.
+2. Create dataset for training. (Train data is augmented, but test data is not augmented.)
 ```bash
 python create_dataset.py
 ```
@@ -22,12 +22,11 @@ python visualize_saved_image.py train
 ```bash
 ./train.py --gpu 0 --epoch 100 --test
 ```
-NOTE: only nin.py is available. (other model is for ImageNet, 1000 class classification)
+NOTE: Only `NIN` architecture is available now. (Other models are for ImageNet, 1000 class classification)
 
-5. Classify sound image on ROS.
+5. Classify sound image on ROS. (Results are Visualized in rqt)
 ```
 roslaunch hitting_sound_classification mini_microphone.launch
-rostopic echo /object_class_by_image
 ```
 
 ### Use sound spectrum directly
