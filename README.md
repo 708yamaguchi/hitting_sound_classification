@@ -1,11 +1,11 @@
 Usage
 =====
 
-## Sound image classification
+## Sound spectrogram classification
 
 ### Commands
 
-1. Save sound image in `~/hitting_sound_data/image/origin`. Specify target object name (e.g. apple).
+1. Save spectrogram in `~/hitting_sound_data/image/origin`. Specify target object name (e.g. apple).
 ```bash
 roslaunch hitting_sound_classification mini_microphone.launch save_image:=true target_class:=(taget object name)
 ```
@@ -26,7 +26,7 @@ python visualize_saved_image.py train
 ```
 NOTE: Only `NIN` architecture is available now. (Other models are for ImageNet, 1000 class classification)
 
-5. Classify sound image on ROS. (Results are Visualized in rqt)
+5. Classify spectrogram on ROS. (Results are Visualized in rqt)
 ```bash
 roslaunch hitting_sound_classification mini_microphone.launch
 ```
@@ -40,11 +40,11 @@ roslaunch hitting_sound_classification play_sound_image_classification.launch fi
 ```
 
 ### Experiment
-3 class classification using sound image (bed, table, tissue_box)  
-![Experiment](https://github.com/708yamaguchi/hitting_sound_classification/blob/media/sound_image_classification.gif)  
-Upper left : Estimated class  
-Left       : Sound image  
-Right      : Video  
+3 class classification using spectrogram (bed, table, tissue_box)
+![Experiment](https://github.com/708yamaguchi/hitting_sound_classification/blob/media/sound_image_classification.gif)
+Upper left : Estimated class
+Left       : spectrogram
+Right      : Video
 
 
 ## Sound spectrum classification
