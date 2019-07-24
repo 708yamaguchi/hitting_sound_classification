@@ -17,7 +17,7 @@ rosrun hitting_sound_classification create_dataset.py
 
 3. Visualize saved images (train or test must be selected as an argument)
 ```bash
-rosrun hitting_sound_classification visualize_saved_image.py train
+rosrun hitting_sound_classification visualize_dataset.py train
 ```
 
 4. Train with chainer. Results are in `scripts/result`
@@ -47,28 +47,6 @@ Left       : spectrogram
 Right      : Video
 
 
-## Sound spectrum classification
-
-### Commands
-
-1. Save sound spectrum in `~/hitting_sound_data/spectrum`. Specify target object name (e.g. apple).
-```bash
-roslaunch hitting_sound_classification microphone.launch save_spectrum:=true target_class:=(taget object name)
-```
-
-2. Classify sound spectrum on ROS.
-```bash
-roslaunch hitting_sound_classification microphone.launch
-rostopic echo /object_class
-```
-
-3. Cross validation for collected sound spectrum
-```bash
-roscd hitting_sound_classification/node_scripts
-python classify_hitting_sound.py
-```
-
 Microphone
 ==========
-MINI Microphone
-http://akizukidenshi.com/catalog/g/gM-12864/
+ThinkPad T460s build-in microphone
