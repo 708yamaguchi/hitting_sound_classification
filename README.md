@@ -1,9 +1,7 @@
 Usage
 =====
 
-## Sound spectrogram classification
-
-### Quick demo
+## Quick demo
 Type Commands below:
 ```
 rosrun hitting_sound_classification create_dataset.py            # create dataset
@@ -11,7 +9,7 @@ rosrun hitting_sound_classification train.py --gpu 0 --epoch 100 # train
 roslaunch hitting_sound_classification microphone.launch         # classification on ROS
 ```
 
-### Commands
+## Commands
 
 1. Save spectrogram in `train_data/original_spectrogram`. Specify target object name (e.g. apple).
 ```bash
@@ -47,7 +45,8 @@ roslaunch hitting_sound_classification record_sound_image_classification.launch 
 roslaunch hitting_sound_classification play_sound_image_classification.launch filename:=$HOME/hoge.bag
 ```
 
-### Experiment
+Experiment
+==========
 3 class classification using spectrogram (applause, flick, voice)
 ![Experiment](https://github.com/708yamaguchi/hitting_sound_classification/blob/media/spectrogram_classification_with_thinkpad.gif)
 
