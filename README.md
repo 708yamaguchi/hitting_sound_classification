@@ -48,8 +48,10 @@ roslaunch hitting_sound_classification play_sound_image_classification.launch fi
 ```
 
 ### Experiment
-3 class classification using spectrogram (bed, table, tissue_box)
-![Experiment](https://github.com/708yamaguchi/hitting_sound_classification/blob/media/sound_image_classification.gif)
+3 class classification using spectrogram (applause, flick, voice)
+![Experiment](https://github.com/708yamaguchi/hitting_sound_classification/blob/media/spectrogram_classification_with_thinkpad.gif)
+
+
 Upper left : Estimated class
 Left       : spectrogram
 Right      : Video
