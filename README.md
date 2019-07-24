@@ -3,6 +3,14 @@ Usage
 
 ## Sound spectrogram classification
 
+### Quick demo
+Type Commands below:
+```
+rosrun hitting_sound_classification create_dataset.py            # create dataset
+rosrun hitting_sound_classification train.py --gpu 0 --epoch 100 # train
+roslaunch hitting_sound_classification microphone.launch         # classification on ROS
+```
+
 ### Commands
 
 1. Save spectrogram in `train_data/original_spectrogram`. Specify target object name (e.g. apple).
