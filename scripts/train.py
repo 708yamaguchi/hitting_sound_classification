@@ -90,7 +90,9 @@ def main():
                         help='Initialize the model from given file')
     parser.add_argument('--loaderjob', '-j', type=int,
                         help='Number of parallel data loading processes')
-    parser.add_argument('--mean', '-m', default='chainer_modules/mean.npy',
+    parser.add_argument('--mean', '-m', default=osp.join(
+        rospack.get_path('hitting_sound_classification'),
+        'scripts', 'chainer_modules', 'mean.npy'),
                         help='Mean file (computed by compute_mean.py)')
     parser.add_argument('--resume', '-r', default='',
                         help='Initialize the trainer from given file')
