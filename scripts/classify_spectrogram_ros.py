@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+# classify spectrogram using neural networks
+
 import argparse
 import numpy as np
 import os.path as osp
@@ -29,13 +31,13 @@ from PIL import Image as Image_
 
 class ClassifySpectrogramROS:
     def __init__(self):
-        archs = {
-            'alex': alex.Alex,
-            'googlenet': googlenet.GoogLeNet,
-            'googlenetbn': googlenetbn.GoogLeNetBN,
+        archs = {  # only NIN is availale now
+            # 'alex': alex.Alex,
+            # 'googlenet': googlenet.GoogLeNet,
+            # 'googlenetbn': googlenetbn.GoogLeNetBN,
             'nin': nin.NIN,
-            'resnet50': resnet50.ResNet50,
-            'resnext50': resnext50.ResNeXt50,
+            # 'resnet50': resnet50.ResNet50,
+            # 'resnext50': resnext50.ResNeXt50,
         }
 
         self.gpu = 0

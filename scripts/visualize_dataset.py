@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# visualize created dataset
+# You can view next image by pressing keys ('q' is quit)
+
 import cv2
 import numpy as np
 import os

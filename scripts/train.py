@@ -3,20 +3,13 @@
 # mainly copied from chainer/train_imagenet.py
 # https://github.com/chainer/chainer/blob/master/examples/imagenet/train_imagenet.py
 
-"""Example code of learning a large scale convnet from ILSVRC2012 dataset.
 
-Prerequisite: To run this example, crop the center of ILSVRC2012 training and
-validation images, scale them to 256x256 and convert them to RGB, and make
-two lists of space-separated CSV whose first column is full path to image and
-second column is zero-origin label (this format is same as that used by Caffe's
-ImageDataLayer).
 
-"""
 import argparse
 import random
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')  # necessary not to ranse Tcl_AsyncDelete Error
+matplotlib.use('Agg')  # necessary not to raise Tcl_AsyncDelete Error
 
 import chainer
 from chainer import dataset
@@ -48,39 +41,8 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
         return len(self.base)
 
     def get_example(self, i):
-        # It reads the i-th image/label pair and return a preprocessed image.
-        # It applies following preprocesses:
-        #     - Cropping (random or center rectangular)
-        #     - Random flip
-        #     - Scaling to [0, 1] value
-        # crop_size = self.crop_size
-
         image, label = self.base[i]
-
-        # _, h, w = image.shape
-
-        # if self.random:
-        #     # Randomly crop a region and flip the image
-        #     top = random.randint(0, h - crop_size - 1)
-        #     left = random.randint(0, w - crop_size - 1)
-        #     if random.randint(0, 1):
-        #         image = image[:, :, ::-1]
-        # else:
-        #     # Crop the center
-        #     top = (h - crop_size) // 2
-        #     left = (w - crop_size) // 2
-        # bottom = top + crop_size
-        # right = left + crop_size
-
-        # image = image[:, top:bottom, left:right]
-
         image = image[[2, 1, 0], :, :]  # bgr -> rgb
-
-        ############### kokode itti with classify_sound_image_ros.py
-        # import cv2
-        # cv2.imshow('hoge', image.transpose((1, 2, 0)).astype(np.uint8))
-        # cv2.waitKey(0)
-        ###############
 
         # image -= self.mean[:, top:bottom, left:right]
         image -= self.mean  # image is np.astype(np.float32)
@@ -89,13 +51,13 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
 
 
 def main():
-    archs = {
-        'alex': alex.Alex,
-        'googlenet': googlenet.GoogLeNet,
-        'googlenetbn': googlenetbn.GoogLeNetBN,
+    archs = {  # only NIN is available now
+        # 'alex': alex.Alex,
+        # 'googlenet': googlenet.GoogLeNet,
+        # 'googlenetbn': googlenetbn.GoogLeNetBN,
         'nin': nin.NIN,
-        'resnet50': resnet50.ResNet50,
-        'resnext50': resnext50.ResNeXt50,
+        # 'resnet50': resnet50.ResNet50,
+        # 'resnext50': resnext50.ResNeXt50,
     }
 
     dtypes = {
@@ -227,12 +189,6 @@ def main():
 
     trainer.extend(extensions.Evaluator(val_iter, model, converter=converter,
                                         device=device), trigger=val_interval)
-    # TODO(sonots): Temporarily disabled for chainerx. Fix it.
-    # if device.xp is not chainerx:
-    #     trainer.extend(extensions.DumpGraph('main/loss'))
-    # trainer.extend(extensions.snapshot(), trigger=val_interval)
-    # trainer.extend(extensions.snapshot_object(
-    #     model, 'model_iter_{.updater.iteration}'), trigger=val_interval)
     trainer.extend(extensions.snapshot_object(
         target=model, filename='model_best.npz'),
         trigger=chainer.training.triggers.MinValueTrigger(
