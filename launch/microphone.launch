@@ -8,15 +8,19 @@
   <arg name="save_image" default="false"/>
   <arg name="target_class" default="table"/>
 
+  <!-- publish sound topics from microphone -->
   <node pkg="hitting_sound_classification" type="listen_microphone.py" name="listen_microphone" output="screen" respawn="true" >
     <param name="cutoff_rate" value="$(arg cutoff_rate)"/>
     <param name="hit_volume_threshold" value="$(arg hit_volume_threshold)"/>
     <param name="time_to_listen" value="0.3"/>
-    <param name="save_image" value="$(arg save_image)"/>
-    <param name="target_class" value="$(arg target_class)"/>
   </node>
 
-  <!-- sound classification if we do not save sound -->
+  <!-- save spectrogram or sound classification -->
+  <group if="$(arg save_image)">
+    <node pkg="hitting_sound_classification" name="save_spectrogram" type="save_spectrogram.py" output="screen">
+      <param name="target_class" value="$(arg target_class)"/>
+    </node>
+  </group>
   <group unless="$(arg save_image)">
       <node pkg="hitting_sound_classification" type="classify_spectrogram_ros.py" name="classify_spectrogram_ros" output="screen">
         <param name="model" value="$(find hitting_sound_classification)/scripts/result/model_best.npz"/>
@@ -24,4 +28,5 @@
       <node pkg="rqt_gui" type="rqt_gui" name="rqt_gui" args="--perspective-file $(find hitting_sound_classification)/config/spectrogram_classification.perspective"/>
       <node pkg="usb_cam" type="usb_cam_node" name="usb_cam_node" />
   </group>
+
 </launch>

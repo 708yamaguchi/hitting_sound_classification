@@ -66,17 +66,6 @@ class ClassifySpectrogramROS:
         # Load the mean file
         mean_file_path = osp.join('/'.join(initmodel.split('/')[:-2]), 'chainer_modules', 'mean.npy')
         self.mean = np.load(mean_file_path)
-        # # Load the dataset files
-        # train = PreprocessedDataset(args.train, args.root, mean, model.insize)
-        # val = PreprocessedDataset(args.val, args.root, mean, self.model.insize,
-        #                           False)
-        # # These iterators load the images with subprocesses running in parallel
-        # # to the training/validation.
-        # train_iter = chainer.iterators.MultiprocessIterator(
-        #     train, args.batchsize, n_processes=args.loaderjob)
-        # val_iter = chainer.iterators.MultiprocessIterator(
-        #     val, args.val_batchsize, repeat=False, n_processes=args.loaderjob)
-        # converter = dataset.concat_examples
 
         # Set up an optimizer
         optimizer = chainer.optimizers.MomentumSGD(lr=0.01, momentum=0.9)
@@ -90,22 +79,11 @@ class ClassifySpectrogramROS:
         self.bridge = CvBridge()
 
     def hit_cb(self, msg):
-        # msg = String()
-        # msg.data = 'no object'
-        # self.pub.publish(msg)
-
         cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
         with chainer.using_config('train', False), \
              chainer.no_backprop_mode():
             x_data = np.array(Image_.fromarray(cv_image).resize((256, 256))).astype(np.float32)
             x_data = x_data.transpose((2, 0, 1))
-            ############### kokode itti with train.py
-            # import cv2
-            # cv2.imshow('hoge', x_data.transpose((1, 2, 0)).astype(np.uint8))
-            # cv2.waitKey(0)
-            ###############
-            # substruct mean value (but I do not have confidence in the code ...)
-            # ch_mean = np.average(self.mean, axis=(1, 2)).astype(np.float32)
             mean = self.mean.astype(np.float32)
             x_data -= mean
             x_data *= (1.0 / 255.0)  # Scale to [0, 1]

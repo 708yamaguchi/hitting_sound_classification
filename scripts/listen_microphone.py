@@ -8,10 +8,6 @@ import rospy
 import pyaudio
 from hitting_sound_classification.msg import Spectrum, Volume, Wave
 import matplotlib.cm as cm
-import os
-import os.path as osp
-from PIL import Image as Image_
-import rospkg
 from sensor_msgs.msg import Image
 import sys
 
@@ -63,18 +59,6 @@ class ListenMicrophone:
         self.bridge = CvBridge()
         self.count_from_last_hitting = 0
 
-        # config for saving spectrogram
-        rospack = rospkg.RosPack()
-        self.save_image = rospy.get_param('~save_image')
-        self.target_class = rospy.get_param(
-            '~target_class', 'unspecified_data')
-        self.save_dir = osp.join(rospack.get_path(
-            'hitting_sound_classification'), 'hitting_sound_data')
-        self.image_save_dir = osp.join(
-            self.save_dir, 'image', 'origin', self.target_class)
-        if self.save_image and not os.path.exists(self.image_save_dir):
-            os.makedirs(self.image_save_dir)
-
         # publisher
         self.wave_pub = rospy.Publisher(  # sound wave data, the length is self.length
             '/microphone/wave', Wave, queue_size=1)
@@ -82,9 +66,9 @@ class ListenMicrophone:
             '/microphone/sound_spec', Spectrum, queue_size=1)
         self.vol_pub = rospy.Publisher(  # current volume
             '/microphone/volume', Volume, queue_size=1)
-        self.spectrogram_pub = rospy.Publisher(
+        self.spectrogram_pub = rospy.Publisher(  # spectrogram (always published)
             '/microphone/spectrogram', Image)
-        self.hit_spectrogram_pub = rospy.Publisher(
+        self.hit_spectrogram_pub = rospy.Publisher(  # spectrogram published only when big sound is detected
             '/microphone/hit_spectrogram', Image)
 
         # published msg
@@ -132,12 +116,6 @@ class ListenMicrophone:
             self.count_from_last_hitting = 0
         else:  # publish (save) hit_spectrogram a little after hitting
             if self.count_from_last_hitting == self.queue_size / 3:
-                if self.save_image:
-                    file_num = len(os.listdir(self.image_save_dir)) + 1  # start from 00001.npy
-                    file_name = osp.join(self.image_save_dir, '{0:05d}.png'.format(file_num))
-                    Image_.fromarray(jet_img_transposed[:, :, [2, 1, 0]]).save(file_name)  # bgr -> rgb
-                    rospy.loginfo('save image: ' + file_name)
-
                 self.hit_spectrogram_pub.publish(imgmsg)
         self.count_from_last_hitting += 1
 
