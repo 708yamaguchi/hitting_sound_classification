@@ -67,11 +67,11 @@ def main():
         description='Learning convnet from ILSVRC2012 dataset')
     parser.add_argument('--train', default=osp.join(
         rospack.get_path('hitting_sound_classification'),
-        'hitting_sound_data/image/dataset/train_images.txt'),
+        'train_data', 'dataset', 'train_images.txt'),
                         help='Path to training image-label list file')
     parser.add_argument('--val', default=osp.join(
         rospack.get_path('hitting_sound_classification'),
-        'hitting_sound_data/image/dataset/test_images.txt'),
+        'train_data', 'dataset', 'test_images.txt'),
                         help='Path to validation image-label list file')
     parser.add_argument('--arch', '-a', choices=archs.keys(), default='nin',
                         help='Convnet architecture')
@@ -97,7 +97,7 @@ def main():
     parser.add_argument('--out', '-o', default='result',
                         help='Output directory')
     parser.add_argument('--root', '-R', default=osp.join(rospack.get_path(
-        'hitting_sound_classification'), 'hitting_sound_data/image/dataset'),
+        'hitting_sound_classification'), 'train_data', 'dataset'),
                         help='Root directory path of image files')
     parser.add_argument('--val_batchsize', '-b', type=int, default=250,
                         help='Validation minibatch size')

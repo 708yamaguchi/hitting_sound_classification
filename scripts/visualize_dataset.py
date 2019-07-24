@@ -19,7 +19,7 @@ def visualize():
     args = parser.parse_args()
     rospack = rospkg.RosPack()
     data_dir = osp.join(rospack.get_path('hitting_sound_classification'),
-                        'hitting_sound_data', 'image', 'dataset')
+                        'train_data', 'dataset')
     for f in os.listdir(data_dir):
         if not f.startswith(args.type):
             continue

@@ -5,29 +5,28 @@
 # some data augmentation is executed for training data (not for test data)
 
 # directory composition
-# origin - classA -- 001.png
-#        |        |- 002.png
-#        |        |- ...
-#        - classB -- 001.png
-#                 |- 002.png
-#                 |- ...
+# original_spectrogram - classA -- 001.png
+#                      |        |- 002.png
+#                      |        |- ...
+#                      - classB -- 001.png
+#                               |- 002.png
+#                               |- ...
 #
 # -> (./create_dataset.py)
 #
-# origin - classA -- 001.png
-#        |        |- 002.png
-#        |        |- ...
-#        - classB -- 001.png
-#                 |- 002.png
-#                 |- ...
-# train  -- images.txt
-#        |- classA001.png
-#        |- classB001.png
-#        |- ...
-# train  -- images.txt
-#        |- classA002.png
-#        |- classB002.png
-#        |- ...
+# original_spectrogram - classA -- 001.png
+#                      |        |- 002.png
+#                      |        |- ...
+#                      - classB -- 001.png
+#                               |- 002.png
+#                               |- ...
+# dataset -- n_class.txt
+#         |- train_images.png  # necessary for chainer
+#         |- test_images.png  # necessary for chainer
+#         |- train_(class)000*.png
+#         |- ...
+#         |- test_(class)000*.png
+#         |- ...
 
 
 import argparse
@@ -61,12 +60,12 @@ def split():
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--rate', default='0.8')  # train:test = 0.8:0.2
     parser.add_argument('-p', '--path', default=osp.join(rospack.get_path(
-        'hitting_sound_classification'), 'hitting_sound_data/image/'))
+        'hitting_sound_classification'), 'train_data'))
     parser.add_argument('-a', '--augment', default='5')  # create (augment) images per 1 image
     args = parser.parse_args()
     rate = float(args.rate)
     root_dir = osp.expanduser(args.path)
-    origin_dir = osp.join(root_dir, 'origin')
+    origin_dir = osp.join(root_dir, 'original_spectrogram')
     dataset_dir = osp.join(root_dir, 'dataset')
     image_list_train = []
     image_list_test = []

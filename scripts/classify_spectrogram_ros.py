@@ -43,7 +43,7 @@ class ClassifySpectrogramROS:
         rospack = rospkg.RosPack()
         n_class_file = osp.join(
             rospack.get_path('hitting_sound_classification'),
-            'hitting_sound_data', 'image', 'dataset', 'n_class.txt')
+            'train_data', 'dataset', 'n_class.txt')
         n_class = 0
         self.classes = []
         with open(n_class_file, mode='r') as f:
