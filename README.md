@@ -11,22 +11,22 @@ roslaunch hitting_sound_classification microphone.launch         # classificatio
 
 ## Commands
 
-1. Save spectrogram in `train_data/original_spectrogram`. Specify target object name (e.g. apple).
+1. Save your original spectrogram in `train_data/original_spectrogram`. Specify target object class.
 ```bash
-roslaunch hitting_sound_classification microphone.launch save_image:=true target_class:=(taget object name)
+roslaunch hitting_sound_classification microphone.launch save_image:=true target_class:=(taget object class)
 ```
 
-2. Create dataset for train and test. (Train data is augmented, but test data is not augmented.)
+2. Create dataset for training with chainer. (Train dataset is augmented, but test dataset is not augmented.)
 ```bash
 rosrun hitting_sound_classification create_dataset.py
 ```
 
-3. Visualize created dataset (train or test must be selected as an argument)
+3. Visualize created dataset (`train` or `test` must be selected as an argument)
 ```bash
 rosrun hitting_sound_classification visualize_dataset.py train
 ```
 
-4. Train with chainer. Results are in `scripts/result`
+4. Train with chainer. Results are output in `scripts/result`
 ```bash
 rosrun hitting_sound_classification train.py --gpu 0 --epoch 100
 ```
