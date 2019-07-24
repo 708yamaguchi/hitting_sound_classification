@@ -35,7 +35,7 @@ import shutil
 
 from PIL import Image as Image_
 
-
+import rospkg
 import numpy as np
 import imgaug as ia
 import imgaug.augmenters as iaa
@@ -73,11 +73,14 @@ seq = iaa.Sequential([
     ))
 ], random_order=True)  # apply augmenters in random order
 
+rospack = rospkg.RosPack()
+
 
 def split():
     parser = argparse.ArgumentParser()
     parser.add_argument('-r', '--rate', default='0.8')  # train:test = 0.8:0.2
-    parser.add_argument('-p', '--path', default=osp.expanduser('~/hitting_sound_data/image/'))
+    parser.add_argument('-p', '--path', default=osp.join(rospack.get_path(
+        'hitting_sound_classification'), 'hitting_sound_data/image/'))
     parser.add_argument('-a', '--augment', default='5')  # create (augment) images per 1 image
     args = parser.parse_args()
     rate = float(args.rate)

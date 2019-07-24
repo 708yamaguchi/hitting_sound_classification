@@ -34,6 +34,7 @@ from chainer_modules import resnet50
 from chainer_modules import resnext50
 
 import os.path as osp
+import rospkg
 
 class PreprocessedDataset(chainer.dataset.DatasetMixin):
 
@@ -102,12 +103,15 @@ def main():
         'float32': np.float32,
         'float64': np.float64,
     }
+    rospack = rospkg.RosPack()
 
     parser = argparse.ArgumentParser(
         description='Learning convnet from ILSVRC2012 dataset')
     parser.add_argument('--train', default=osp.expanduser('~/hitting_sound_data/image/dataset/train_images.txt'),
                         help='Path to training image-label list file')
-    parser.add_argument('--val', default=osp.expanduser('~/hitting_sound_data/image/dataset/test_images.txt'),
+    parser.add_argument('--val', default=osp.join(
+        rospack.get_path('hitting_sound_classification'),
+        'hitting_sound_data/image/dataset/test_images.txt'),
                         help='Path to validation image-label list file')
     parser.add_argument('--arch', '-a', choices=archs.keys(), default='nin',
                         help='Convnet architecture')

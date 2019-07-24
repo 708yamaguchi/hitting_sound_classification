@@ -6,6 +6,7 @@ import os.path as osp
 import os
 
 import rospy
+import rospkg
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
 from cv_bridge import CvBridge
@@ -26,7 +27,7 @@ from train import PreprocessedDataset
 
 from PIL import Image as Image_
 
-class ClassifySoundImageROS:
+class ClassifySpectrogramROS:
     def __init__(self):
         archs = {
             'alex': alex.Alex,
@@ -45,7 +46,10 @@ class ClassifySoundImageROS:
         print('')
 
         # Initialize the model to train
-        n_class_file = osp.join(os.environ['HOME'], 'hitting_sound_data', 'image', 'dataset', 'n_class.txt')
+        rospack = rospkg.RosPack()
+        n_class_file = osp.join(
+            rospack.get_path('hitting_sound_classification'),
+            'hitting_sound_data', 'image', 'dataset', 'n_class.txt')
         n_class = 0
         self.classes = []
         with open(n_class_file, mode='r') as f:
@@ -80,7 +84,7 @@ class ClassifySoundImageROS:
 
         # subscriber and publisher
         self.hit_sub = rospy.Subscriber(
-            '/microphone/hit_sound_image', Image, self.hit_cb)
+            '/microphone/hit_spectrogram', Image, self.hit_cb)
         self.pub = rospy.Publisher('/object_class_by_image', String, queue_size=1)
 
         self.bridge = CvBridge()
@@ -119,6 +123,6 @@ class ClassifySoundImageROS:
 
 
 if __name__ == '__main__':
-    rospy.init_node('classify_sound_image_ros')
-    csir = ClassifySoundImageROS()
+    rospy.init_node('classify_spectrogram_ros')
+    csir = ClassifySpectrogramROS()
     rospy.spin()

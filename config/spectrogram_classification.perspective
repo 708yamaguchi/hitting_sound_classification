@@ -60,7 +60,7 @@
                 },
                 "mouse_pub_topic": {
                   "type": "repr",
-                  "repr": "u'/microphone/sound_image_mouse_left'"
+                  "repr": "u'/microphone/spectrogram_mouse_left'"
                 },
                 "num_gridlines": {
                   "type": "repr",
@@ -80,7 +80,7 @@
                 },
                 "topic": {
                   "type": "repr",
-                  "repr": "u'/microphone/sound_image'"
+                  "repr": "u'/microphone/spectrogram'"
                 },
                 "publish_click_location": {
                   "type": "repr",
