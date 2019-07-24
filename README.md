@@ -5,24 +5,24 @@ Usage
 
 ### Commands
 
-1. Save spectrogram in `~/hitting_sound_data/image/origin`. Specify target object name (e.g. apple).
+1. Save spectrogram in `hitting_sound_data/image/origin`. Specify target object name (e.g. apple).
 ```bash
 roslaunch hitting_sound_classification microphone.launch save_image:=true target_class:=(taget object name)
 ```
 
 2. Create dataset for training. (Train data is augmented, but test data is not augmented.)
 ```bash
-python create_dataset.py
+rosrun hitting_sound_classification create_dataset.py
 ```
 
 3. Visualize saved images (train or test must be selected as an argument)
 ```bash
-python visualize_saved_image.py train
+rosrun hitting_sound_classification visualize_saved_image.py train
 ```
 
 4. Train with chainer. Results are in `scripts/result`
 ```bash
-./train.py --gpu 0 --epoch 100 --test
+rosrun hitting_sound_classification train.py --gpu 0 --epoch 100
 ```
 NOTE: Only `NIN` architecture is available now. (Other models are for ImageNet, 1000 class classification)
 

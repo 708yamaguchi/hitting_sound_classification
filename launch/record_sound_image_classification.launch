@@ -11,10 +11,8 @@
         args="-O $(arg filename)
               -b 0
               /usb_cam_node/image_raw
-              /microphone/sound_image
+              /microphone/spectrogram
               /object_class_by_image
-
-              /microphone/wave
               "
 
         output="screen">
