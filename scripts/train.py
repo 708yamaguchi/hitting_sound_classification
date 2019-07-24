@@ -3,22 +3,13 @@
 # mainly copied from chainer/train_imagenet.py
 # https://github.com/chainer/chainer/blob/master/examples/imagenet/train_imagenet.py
 
-
-
 import argparse
-import random
-import numpy as np
-import matplotlib
-matplotlib.use('Agg')  # necessary not to raise Tcl_AsyncDelete Error
 
 import chainer
 from chainer import dataset
 from chainer import training
 from chainer.training import extensions
-# import chainerx
-
 from chainer_modules import dali_util
-
 from chainer_modules import alex
 from chainer_modules import googlenet
 from chainer_modules import googlenetbn
@@ -26,8 +17,13 @@ from chainer_modules import nin
 from chainer_modules import resnet50
 from chainer_modules import resnext50
 
+import matplotlib
+import numpy as np
 import os.path as osp
 import rospkg
+
+matplotlib.use('Agg')  # necessary not to raise Tcl_AsyncDelete Error
+
 
 class PreprocessedDataset(chainer.dataset.DatasetMixin):
 

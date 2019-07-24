@@ -30,17 +30,15 @@
 #        |- ...
 
 
-import os
-import os.path as osp
 import argparse
-import shutil
-
-from PIL import Image as Image_
-
-import rospkg
-import numpy as np
 import imgaug as ia
 import imgaug.augmenters as iaa
+import numpy as np
+import os
+import os.path as osp
+from PIL import Image as Image_
+import rospkg
+import shutil
 
 # for data augmentation
 ia.seed(1)

@@ -2,22 +2,8 @@
 
 # classify spectrogram using neural networks
 
-import argparse
-import numpy as np
-import os.path as osp
-import os
-
-import rospy
-import rospkg
-from sensor_msgs.msg import Image
-from std_msgs.msg import String
-from cv_bridge import CvBridge
-
 import chainer
 from chainer import cuda
-from chainer import dataset
-from chainer import training
-from chainer.training import extensions
 from chainer_modules import alex
 from chainer_modules import googlenet
 from chainer_modules import googlenetbn
@@ -25,9 +11,15 @@ from chainer_modules import nin
 from chainer_modules import resnet50
 from chainer_modules import resnext50
 
-from train import PreprocessedDataset
-
+from cv_bridge import CvBridge
+import numpy as np
+import os.path as osp
 from PIL import Image as Image_
+import rospy
+import rospkg
+from sensor_msgs.msg import Image
+from std_msgs.msg import String
+
 
 class ClassifySpectrogramROS:
     def __init__(self):
@@ -66,7 +58,8 @@ class ClassifySpectrogramROS:
         device.use()
 
         # Load the mean file
-        mean_file_path = osp.join('/'.join(initmodel.split('/')[:-2]), 'chainer_modules', 'mean.npy')
+        mean_file_path = osp.join('/'.join(initmodel.split('/')[:-2]),
+                                  'chainer_modules', 'mean.npy')
         self.mean = np.load(mean_file_path)
 
         # Set up an optimizer
@@ -76,12 +69,14 @@ class ClassifySpectrogramROS:
         # subscriber and publisher
         self.hit_sub = rospy.Subscriber(
             '/microphone/hit_spectrogram', Image, self.hit_cb)
-        self.pub = rospy.Publisher('/object_class_by_image', String, queue_size=1)
+        self.pub = rospy.Publisher(
+            '/object_class_by_image', String, queue_size=1)
 
         self.bridge = CvBridge()
 
     def hit_cb(self, msg):
-        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')
+        cv_image = self.bridge.imgmsg_to_cv2(
+            msg, desired_encoding='passthrough')
         with chainer.using_config('train', False), \
              chainer.no_backprop_mode():
             x_data = np.array(Image_.fromarray(cv_image).resize((256, 256))).astype(np.float32)

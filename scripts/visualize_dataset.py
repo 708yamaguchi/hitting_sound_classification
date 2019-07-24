@@ -4,14 +4,13 @@
 # visualize created dataset
 # You can view next image by pressing keys ('q' is quit)
 
+import argparse
 import cv2
 import numpy as np
 import os
 import os.path as osp
-import rospkg
-import argparse
-
 from PIL import Image as Image_
+import rospkg
 
 
 def visualize():

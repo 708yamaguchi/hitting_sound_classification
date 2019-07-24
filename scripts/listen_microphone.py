@@ -3,11 +3,11 @@
 # This node connects to microphone and publish ROS msg
 
 from cv_bridge import CvBridge
-import numpy as np
-import rospy
-import pyaudio
 from hitting_sound_classification.msg import Spectrum, Volume, Wave
 import matplotlib.cm as cm
+import numpy as np
+import pyaudio
+import rospy
 from sensor_msgs.msg import Image
 import sys
 

@@ -6,8 +6,8 @@ from cv_bridge import CvBridge
 import os
 import os.path as osp
 from PIL import Image as Image_
-import rospy
 import rospkg
+import rospy
 from sensor_msgs.msg import Image
 
 
