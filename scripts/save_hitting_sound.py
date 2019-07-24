@@ -16,8 +16,8 @@ import os.path as osp
 class SaveHittingSound:
     def __init__(self):
         rospy.init_node('save_hitting_sound', anonymous=True)
-        self.length = rospy.get_param('/mini_microphone/length')
-        self.rate = rospy.get_param('/mini_microphone/rate')
+        self.length = rospy.get_param('/microphone/length')
+        self.rate = rospy.get_param('/microphone/rate')
         self.cutoff_rate = rospy.get_param('~cutoff_rate')
         self.wave_strength_thre = 2.0
         self.visualize_data_length = min(int(self.length * self.cutoff_rate / self.rate), self.length/2)
@@ -29,11 +29,11 @@ class SaveHittingSound:
             ))  # remove folding noise
         # publish
         self.hitting_sound_pub = rospy.Publisher(
-            '/mini_microphone/hitting_sound', Float32MultiArray)
+            '/microphone/hitting_sound', Float32MultiArray)
         self.sound_image_pub = rospy.Publisher(
-            '/mini_microphone/sound_image', Image)
+            '/microphone/sound_image', Image)
         self.hit_sound_image_pub = rospy.Publisher(
-            '/mini_microphone/hit_sound_image', Image)
+            '/microphone/hit_sound_image', Image)
         self.hitting_sound = Float32MultiArray()
         self.hitting_sound.layout = []
         dim = MultiArrayDimension()
@@ -48,7 +48,7 @@ class SaveHittingSound:
         self.bridge = CvBridge()
         self.count_from_last_hitting = 0
         # subscribe
-        rospy.Subscriber('/mini_microphone/sound_spec', Float32MultiArray, self.sound_spec_cb)
+        rospy.Subscriber('/microphone/sound_spec', Float32MultiArray, self.sound_spec_cb)
         # save data
         self.save_image = rospy.get_param('~save_image')
         self.save_spectrum = rospy.get_param('~save_spectrum')

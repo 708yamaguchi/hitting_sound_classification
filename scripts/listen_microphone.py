@@ -11,19 +11,21 @@ class ListenMiniMicrophone:
 
     def __init__(self):
         # init rospy node
-        rospy.init_node('listen_mini_microphone', anonymous=True)
+        rospy.init_node('listen_microphone', anonymous=True)
         self.p = pyaudio.PyAudio()
         # config for mini microphone
-        self.chunk = rospy.get_param('/mini_microphone/chunk')  # chunk is like a buffer, each buffer will contain chunk samples
-        self.length = rospy.get_param('/mini_microphone/length')  # length relates hamming window range
-        self.rate = rospy.get_param('/mini_microphone/rate')
+        self.microphone_name = rospy.get_param('/microphone/name', 'default')
+        self.chunk = rospy.get_param('/microphone/chunk')  # chunk is like a buffer, each buffer will contain chunk samples
+        self.length = rospy.get_param('/microphone/length')  # length relates hamming window range
+        self.rate = rospy.get_param('/microphone/rate')
         self.channels = 1
         self.format = pyaudio.paFloat32
         # set parameters for PnP Sound Device
         self.device_index = True
         for index in range(0, self.p.get_device_count()):
             device_info = self.p.get_device_info_by_index(index)
-            if u'USB PnP Sound Device' in device_info['name']:
+            # if u'USB PnP Sound Device' in device_info['name']:
+            if u'default' in device_info['name']:
                 self.device_index = device_info['index']
         if self.device_index is True:
             print('Cannot find audio device!')
@@ -42,13 +44,13 @@ class ListenMiniMicrophone:
                                   frames_per_buffer=self.chunk)
         # sound wave data, the length is self.length
         self.wavepub = rospy.Publisher(
-            '/mini_microphone/wave', Float32MultiArray, queue_size=1)
+            '/microphone/wave', Float32MultiArray, queue_size=1)
         # sound spectrum, which is fft of wave data
         self.specpub = rospy.Publisher(
-            '/mini_microphone/sound_spec', Float32MultiArray, queue_size=1)
+            '/microphone/sound_spec', Float32MultiArray, queue_size=1)
         # current volume
         self.volpub = rospy.Publisher(
-            '/mini_microphone/volume', Float32, queue_size=1)
+            '/microphone/volume', Float32, queue_size=1)
         self.wavemsg = Float32MultiArray()
         self.specmsg = Float32MultiArray()
         self.volmsg = Float32()
