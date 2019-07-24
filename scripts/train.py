@@ -96,7 +96,9 @@ def main():
                         help='Mean file (computed by compute_mean.py)')
     parser.add_argument('--resume', '-r', default='',
                         help='Initialize the trainer from given file')
-    parser.add_argument('--out', '-o', default='result',
+    parser.add_argument('--out', '-o', default=osp.join(
+        rospack.get_path('hitting_sound_classification'),
+        'scripts', 'result'),
                         help='Output directory')
     parser.add_argument('--root', '-R', default=osp.join(rospack.get_path(
         'hitting_sound_classification'), 'train_data', 'dataset'),
