@@ -5,17 +5,17 @@ Usage
 
 ### Commands
 
-1. Save spectrogram in `hitting_sound_data/image/origin`. Specify target object name (e.g. apple).
+1. Save spectrogram in `train_data/original_spectrogram`. Specify target object name (e.g. apple).
 ```bash
 roslaunch hitting_sound_classification microphone.launch save_image:=true target_class:=(taget object name)
 ```
 
-2. Create dataset for training. (Train data is augmented, but test data is not augmented.)
+2. Create dataset for train and test. (Train data is augmented, but test data is not augmented.)
 ```bash
 rosrun hitting_sound_classification create_dataset.py
 ```
 
-3. Visualize saved images (train or test must be selected as an argument)
+3. Visualize created dataset (train or test must be selected as an argument)
 ```bash
 rosrun hitting_sound_classification visualize_dataset.py train
 ```
@@ -24,9 +24,9 @@ rosrun hitting_sound_classification visualize_dataset.py train
 ```bash
 rosrun hitting_sound_classification train.py --gpu 0 --epoch 100
 ```
-NOTE: Only `NIN` architecture is available now. (Other models are for ImageNet, 1000 class classification)
+NOTE: Only `NIN` architecture is available now.
 
-5. Classify spectrogram on ROS. (Results are Visualized in rqt)
+5. Classify spectrogram on ROS. (Results are visualized in rqt)
 ```bash
 roslaunch hitting_sound_classification microphone.launch
 ```
