@@ -1,12 +1,13 @@
 <launch>
-  <param name="/microphone/name" value="default"/> <!-- default microphone on thinkpad T460s -->
-  <param name="/microphone/chunk" value="512"/>
-  <param name="/microphone/length" value="512"/>
-  <param name="/microphone/rate" value="44100"/>
+  <arg name="microphone_name" default="default"/> <!-- default microphone on thinkpad T460s -->
   <arg name="cutoff_rate" default="8000"/>
   <arg name="hit_volume_threshold" default="0.2"/>
   <arg name="save_image" default="false"/>
   <arg name="target_class" default="table"/>
+  <param name="/microphone/name" value="$(arg microphone_name)"/>
+  <param name="/microphone/chunk" value="512"/>
+  <param name="/microphone/length" value="512"/>
+  <param name="/microphone/rate" value="44100"/>
 
   <!-- publish sound topics from microphone -->
   <node pkg="hitting_sound_classification" type="listen_microphone.py" name="listen_microphone" output="screen" respawn="true" >

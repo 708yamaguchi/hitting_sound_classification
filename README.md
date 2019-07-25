@@ -2,7 +2,7 @@ Usage
 =====
 
 ## Quick demo
-Type Commands below:
+This is sound classification demo using ThinkPad's build-in camera and microphone.
 ```
 rosrun hitting_sound_classification create_dataset.py            # create dataset
 rosrun hitting_sound_classification train.py --gpu 0 --epoch 100 # train
@@ -15,6 +15,8 @@ roslaunch hitting_sound_classification microphone.launch         # classificatio
 ```bash
 roslaunch hitting_sound_classification microphone.launch save_image:=true target_class:=(taget object class)
 ```
+NOTE: You can change microphone by giving `microphone_name` argument to this roslaunch. The names of microphones can be seen by `pyaudio.PyAudio().get_device_info_by_index(index)` fuction.
+NOTE: You can change threshold of hitting detection by giving `hit_volume_threshold` argument to this roslaunch.
 
 2. Create dataset for training with chainer. (Train dataset is augmented, but test dataset is not augmented.)
 ```bash
